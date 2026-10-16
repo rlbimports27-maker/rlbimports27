@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RLB Imports | Painel Administrativo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #d32f2f;
+      --primary-hover: #b71c1c;
+      --bg-dark: #0d0d0d;
+      --bg-surface: #181818;
+      --bg-card: #222222;
+      --text-main: #ffffff;
+      --text-muted: #aaaaaa;
+      --border-color: #333333;
+      --font-family: 'Inter', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-family);
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      padding: 20px 3%;
+    }
+
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      background: var(--bg-surface);
+      padding: 18px 20px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+    }
+
+    .admin-header img {
+      height: 48px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    h1 { 
+      font-size: 16px; 
+      font-weight: 700; 
+      text-transform: uppercase; 
+      letter-spacing: 0.5px; 
+      color: var(--text-main);
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .tab-btn {
+      padding: 12px 20px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      font-weight: 600;
+      font-size: 12px;
+      cursor: pointer;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    .adm-card {
+      background: var(--bg-surface);
+      padding: 22px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      margin-bottom: 25px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+
+    .form-group { margin-bottom: 12px; }
+    .form-group.full { grid-column: 1 / -1; }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+    }
+
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%;
+      padding: 10px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      font-size: 13px;
+      border-radius: 4px;
+      outline: none;
+    }
+
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+      border-color: var(--primary);
+    }
+
+    .btn-action {
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      padding: 12px 20px;
+      font-weight: 700;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+
+    .btn-action:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-secondary {
+      background: #333333;
+      color: #ffffff;
+      border: 1px solid var(--border-color);
+      padding: 8px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .btn-secondary:hover {
+      background: #444444;
+    }
+
+    .btn-edit {
+      background: #2196F3;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 4px;
+      margin-right: 5px;
+    }
+
+    .btn-edit:hover {
+      background: #1e88e5;
+    }
+
+    .adm-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .adm-table th, .adm-table td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 12px;
+    }
+
+    .adm-table th {
+      background: #111111;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+    }
+
+    .variation-item {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .btn-delete {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .btn-delete:hover {
+      background: var(--primary-hover);
+    }
+
+    /* ESTILOS DO MODAL DE EDIÇÃO */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.85);
+      overflow-y: auto;
+      padding: 20px 10px;
+    }
+
+    .modal-content {
+      background-color: var(--bg-surface);
+      margin: 2% auto;
+      padding: 25px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      width: 90%;
+      max-width: 700px;
+      position: relative;
+    }
+
+    .close-modal {
+      position: absolute;
+      right: 20px;
+      top: 15px;
+      color: var(--text-muted);
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close-modal:hover {
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="admin-header">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <img src="logo.png" alt="RLB Imports">
+      <h1>Painel de Controle</h1>
+    </div>
+  </div>
+
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="switchTab('tab-orders', this)">
+      <i class="fa-solid fa-clipboard-list"></i> Pedidos & Anotações
+    </button>
+    <button class="tab-btn" onclick="switchTab('tab-products', this)">
+      <i class="fa-solid fa-box-archive"></i> Produtos do Catálogo
+    </button>
+  </div>
+
+  <!-- ABA 1: PEDIDOS E ANOTAÇÕES -->
+  <div id="tab-orders" class="tab-content active">
+    <div class="adm-card">
+      <h3 style="font-size: 13px; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px;">Anotar Novo Pedido</h3>
+      <form id="add-order-form">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Nome do Cliente</label>
+            <input type="text" id="ord-client" required placeholder="Ex: João Silva" />
+          </div>
+
+          <div class="form-group">
+            <label>Produto(s)</label>
+            <input type="text" id="ord-product" required placeholder="Ex: Camisa Nike M" />
+          </div>
+
+          <div class="form-group">
+            <label>Valor Total (R$)</label>
+            <input type="number" step="0.01" id="ord-value" required placeholder="0.00" />
+          </div>
+
+          <div class="form-group">
+            <label>Tipo de Entrega</label>
+            <select id="ord-type">
+              <option value="Entrega">Entrega</option>
+              <option value="Retirada">Retirada</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Status do Pedido</label>
+            <select id="ord-status">
+              <option value="Pendente">Pendente</option>
+              <option value="Em separação">Em separação</option>
+              <option value="Enviado">Enviado</option>
+              <option value="Entregue">Entregue</option>
+            </select>
+          </div>
+
+          <div class="form-group full">
+            <label>Endereço de Entrega</label>
+            <input type="text" id="ord-address" placeholder="Rua, Número, Bairro, Cidade" />
+          </div>
+
+          <div class="form-group full">
+            <label>Observações</label>
+            <textarea id="ord-notes" rows="2" placeholder="Informações adicionais, chave PIX, etc..."></textarea>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-action">Salvar Pedido</button>
+      </form>
+    </div>
+
+    <h3 style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">Pedidos Anotados</h3>
+    <div style="overflow-x: auto;">
+      <table class="adm-table">
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            <th>Produto</th>
+            <th>Valor</th>
+            <th>Tipo</th>
+            <th>Endereço</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="orders-list"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ABA 2: CADASTRO DE PRODUTOS -->
+  <div id="tab-products" class="tab-content">
+    <div class="adm-card">
+      <h3 style="font-size: 13px; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px;">Cadastrar Novo Produto</h3>
+      <form id="add-product-form">
+        <div class="form-grid">
+          <div class="form-group full">
+            <label>Nome do Produto</label>
+            <input type="text" id="adm-name" required placeholder="Ex: Caderno B2 Flex" />
+          </div>
+
+          <div class="form-group">
+            <label>Preço Base (R$)</label>
+            <input type="number" step="0.01" id="adm-price" required placeholder="0.00" />
+          </div>
+
+          <div class="form-group">
+            <label>Categoria (Seção)</label>
+            <input type="text" id="adm-category" required placeholder="Ex: Camisas, Acessórios..." />
+          </div>
+
+          <div class="form-group">
+            <label>Tag em Destaque</label>
+            <select id="adm-tag">
+              <option value="">Nenhuma</option>
+              <option value="Mais Pedidos">Mais Pedidos</option>
+              <option value="Esgotado">Esgotado</option>
+              <option value="Novidade">Novidade</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Bloco de Variações Personalizadas -->
+        <div class="form-group full" style="border: 1px dashed var(--border-color); padding: 15px; margin: 15px 0; border-radius: 4px;">
+          <label style="font-weight: bold; margin-bottom: 10px;">Variações com Preço e Foto Próprias (Opcional)</label>
+          <div id="variations-container"></div>
+          <button type="button" class="btn-secondary" onclick="addVariationField()">+ Adicionar Variação</button>
+        </div>
+
+        <div class="form-group full">
+          <label>Fotos Principais do Produto (URLs separadas por vírgula)</label>
+          <textarea id="adm-images" rows="2" required placeholder="https://link.com/foto1.jpg, https://link.com/foto2.jpg"></textarea>
+        </div>
+
+        <div class="form-group full">
+          <label>Descrição Detalhada</label>
+          <textarea id="adm-desc" rows="4" required placeholder="Insira a descrição completa do produto..."></textarea>
+        </div>
+
+        <button type="submit" class="btn-action">Salvar Produto no Catálogo</button>
+      </form>
+    </div>
+
+    <h3 style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">Produtos no Catálogo</h3>
+    <div style="overflow-x: auto;">
+      <table class="adm-table">
+        <thead>
+          <tr>
+            <th>Foto</th>
+            <th>Nome</th>
+            <th>Preço Base</th>
+            <th>Categoria</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="adm-products-list"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- MODAL DE EDIÇÃO DE PRODUTO -->
+  <div id="edit-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeEditModal()">&times;</span>
+      <h3 style="font-size: 14px; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--primary);">Editar Produto</h3>
+      <form id="edit-product-form">
+        <input type="hidden" id="edit-prod-id" />
+        <div class="form-grid">
+          <div class="form-group full">
+            <label>Nome do Produto</label>
+            <input type="text" id="edit-adm-name" required />
+          </div>
+
+          <div class="form-group">
+            <label>Preço Base (R$)</label>
+            <input type="number" step="0.01" id="edit-adm-price" required />
+          </div>
+
+          <div class="form-group">
+            <label>Categoria (Seção)</label>
+            <input type="text" id="edit-adm-category" required />
+          </div>
+
+          <div class="form-group">
+            <label>Tag em Destaque</label>
+            <select id="edit-adm-tag">
+              <option value="">Nenhuma</option>
+              <option value="Mais Pedidos">Mais Pedidos</option>
+              <option value="Esgotado">Esgotado</option>
+              <option value="Novidade">Novidade</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group full" style="border: 1px dashed var(--border-color); padding: 15px; margin: 15px 0; border-radius: 4px;">
+          <label style="font-weight: bold; margin-bottom: 10px;">Variações com Preço e Foto Próprias (Opcional)</label>
+          <div id="edit-variations-container"></div>
+          <button type="button" class="btn-secondary" onclick="addEditVariationField()">+ Adicionar Variação</button>
+        </div>
+
+        <div class="form-group full">
+          <label>Fotos Principais (URLs separadas por vírgula)</label>
+          <textarea id="edit-adm-images" rows="2" required></textarea>
+        </div>
+
+        <div class="form-group full">
+          <label>Descrição Detalhada</label>
+          <textarea id="edit-adm-desc" rows="4" required></textarea>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 15px;">
+          <button type="submit" class="btn-action" style="flex:1;">Atualizar Produto</button>
+          <button type="button" class="btn-secondary" onclick="closeEditModal()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getDatabase, ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA2S6OtVtXadY5TumZf3w6v8hZ7B_ekDGM",
+      authDomain: "rlb-imports.firebaseapp.com",
+      projectId: "rlb-imports",
+      storageBucket: "rlb-imports.firebasestorage.app",
+      messagingSenderId: "73372135217",
+      appId: "1:73372135217:web:3480750cd31417d0ec8a10"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    const productsRef = ref(db, 'products');
+    const ordersRef = ref(db, 'orders');
+
+    let productsData = {};
+    let ordersData = {};
+
+    window.switchTab = (tabId, element) => {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      
+      element.classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+    };
+
+    // --- GERENCIAMENTO DE PEDIDOS ---
+    document.getElementById('add-order-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const newOrder = {
+        client: document.getElementById('ord-client').value,
+        product: document.getElementById('ord-product').value,
+        value: parseFloat(document.getElementById('ord-value').value),
+        type: document.getElementById('ord-type').value,
+        status: document.getElementById('ord-status').value,
+        address: document.getElementById('ord-address').value,
+        notes: document.getElementById('ord-notes').value,
+        date: new Date().toLocaleDateString('pt-BR')
+      };
+
+      push(ordersRef, newOrder).then(() => {
+        alert('Pedido salvo com sucesso!');
+        document.getElementById('add-order-form').reset();
+      });
+    });
+
+    onValue(ordersRef, (snapshot) => {
+      ordersData = snapshot.val() || {};
+      renderOrders();
+    });
+
+    function renderOrders() {
+      const tbody = document.getElementById('orders-list');
+      tbody.innerHTML = '';
+
+      Object.keys(ordersData).forEach(id => {
+        const o = ordersData[id];
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><b>${o.client}</b></td>
+          <td>${o.product}</td>
+          <td>R$ ${parseFloat(o.value).toFixed(2)}</td>
+          <td>${o.type}</td>
+          <td>${o.address || '-'}</td>
+          <td>
+            <select style="padding:4px; font-size:11px;" onchange="updateOrderStatus('${id}', this.value)">
+              <option value="Pendente" ${o.status === 'Pendente' ? 'selected' : ''}>Pendente</option>
+              <option value="Em separação" ${o.status === 'Em separação' ? 'selected' : ''}>Em separação</option>
+              <option value="Enviado" ${o.status === 'Enviado' ? 'selected' : ''}>Enviado</option>
+              <option value="Entregue" ${o.status === 'Entregue' ? 'selected' : ''}>Entregue</option>
+            </select>
+          </td>
+          <td><button class="btn-delete" onclick="deleteOrder('${id}')">Excluir</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    window.updateOrderStatus = (id, newStatus) => {
+      update(ref(db, `orders/${id}`), { status: newStatus });
+    };
+
+    window.deleteOrder = (id) => {
+      if (confirm('Excluir este pedido?')) {
+        remove(ref(db, `orders/${id}`));
+      }
+    };
+
+    // --- GERENCIAMENTO DE PRODUTOS ---
+    window.addVariationField = (name = '', price = '', image = '') => {
+      const container = document.getElementById('variations-container');
+      const div = document.createElement('div');
+      div.className = 'variation-item';
+      div.innerHTML = `
+        <input type="text" placeholder="Variação (ex: Azul G)" class="var-name" style="flex:1;" value="${name}" />
+        <input type="number" step="0.01" placeholder="Preço" class="var-price" style="width:90px;" value="${price}" />
+        <input type="url" placeholder="URL Imagem Específica" class="var-img" style="flex:1;" value="${image}" />
+        <button type="button" class="btn-delete" onclick="this.parentElement.remove()">X</button>
+      `;
+      container.appendChild(div);
+    };
+
+    document.getElementById('add-product-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const varElements = document.querySelectorAll('#variations-container .variation-item');
+      const variationsList = [];
+      varElements.forEach(el => {
+        const name = el.querySelector('.var-name').value;
+        const price = el.querySelector('.var-price').value;
+        const image = el.querySelector('.var-img').value;
+        if (name && price) {
+          variationsList.push({ name, price, image });
+        }
+      });
+
+      const newProduct = {
+        name: document.getElementById('adm-name').value,
+        price: document.getElementById('adm-price').value,
+        category: document.getElementById('adm-category').value,
+        tag: document.getElementById('adm-tag').value,
+        images: document.getElementById('adm-images').value,
+        description: document.getElementById('adm-desc').value,
+        variationsList: variationsList
+      };
+
+      push(productsRef, newProduct).then(() => {
+        alert('Produto adicionado ao catálogo!');
+        document.getElementById('add-product-form').reset();
+        document.getElementById('variations-container').innerHTML = '';
+      });
+    });
+
+    onValue(productsRef, (snapshot) => {
+      productsData = snapshot.val() || {};
+      renderADM();
+    });
+
+    function renderADM() {
+      const tbody = document.getElementById('adm-products-list');
+      tbody.innerHTML = '';
+
+      Object.keys(productsData).forEach(id => {
+        const p = productsData[id];
+        const images = p.images ? p.images.split(',')[0].trim() : '';
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><img src="${images}" width="36" height="36" style="object-fit:contain; border-radius:4px;" onerror="this.src='https://via.placeholder.com/36'"></td>
+          <td><b>${p.name}</b></td>
+          <td>R$ ${parseFloat(p.price).toFixed(2)}</td>
+          <td>${p.category}</td>
+          <td>
+            <button class="btn-edit" onclick="openEditModal('${id}')">Editar</button>
+            <button class="btn-delete" onclick="deleteProduct('${id}')">Excluir</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    window.deleteProduct = (id) => {
+      if (confirm('Remover este produto do catálogo?')) {
+        remove(ref(db, `products/${id}`));
+      }
+    };
+
+    // --- EDIÇÃO DE PRODUTOS ---
+    window.addEditVariationField = (name = '', price = '', image = '') => {
+      const container = document.getElementById('edit-variations-container');
+      const div = document.createElement('div');
+      div.className = 'variation-item';
+      div.innerHTML = `
+        <input type="text" placeholder="Variação (ex: Azul G)" class="var-name" style="flex:1;" value="${name}" />
+        <input type="number" step="0.01" placeholder="Preço" class="var-price" style="width:90px;" value="${price}" />
+        <input type="url" placeholder="URL Imagem Específica" class="var-img" style="flex:1;" value="${image}" />
+        <button type="button" class="btn-delete" onclick="this.parentElement.remove()">X</button>
+      `;
+      container.appendChild(div);
+    };
+
+    window.openEditModal = (id) => {
+      const product = productsData[id];
+      if (!product) return;
+
+      document.getElementById('edit-prod-id').value = id;
+      document.getElementById('edit-adm-name').value = product.name || '';
+      document.getElementById('edit-adm-price').value = product.price || '';
+      document.getElementById('edit-adm-category').value = product.category || '';
+      document.getElementById('edit-adm-tag').value = product.tag || '';
+      document.getElementById('edit-adm-images').value = product.images || '';
+      document.getElementById('edit-adm-desc').value = product.description || '';
+
+      const editVarContainer = document.getElementById('edit-variations-container');
+      editVarContainer.innerHTML = '';
+
+      if (product.variationsList && Array.isArray(product.variationsList)) {
+        product.variationsList.forEach(v => {
+          window.addEditVariationField(v.name || '', v.price || '', v.image || '');
+        });
+      }
+
+      document.getElementById('edit-modal').style.display = 'block';
+    };
+
+    window.closeEditModal = () => {
+      document.getElementById('edit-modal').style.display = 'none';
+    };
+
+    document.getElementById('edit-product-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const prodId = document.getElementById('edit-prod-id').value;
+      if (!prodId) return;
+
+      const varElements = document.querySelectorAll('#edit-variations-container .variation-item');
+      const variationsList = [];
+      varElements.forEach(el => {
+        const name = el.querySelector('.var-name').value;
+        const price = el.querySelector('.var-price').value;
+        const image = el.querySelector('.var-img').value;
+        if (name && price) {
+          variationsList.push({ name, price, image });
+        }
+      });
+
+      const updatedProduct = {
+        name: document.getElementById('edit-adm-name').value,
+        price: document.getElementById('edit-adm-price').value,
+        category: document.getElementById('edit-adm-category').value,
+        tag: document.getElementById('edit-adm-tag').value,
+        images: document.getElementById('edit-adm-images').value,
+        description: document.getElementById('edit-adm-desc').value,
+        variationsList: variationsList
+      };
+
+      update(ref(db, `products/${prodId}`), updatedProduct).then(() => {
+        alert('Produto atualizado com sucesso!');
+        closeEditModal();
+      });
+    });
+  </script>
+</body>
+</html>
